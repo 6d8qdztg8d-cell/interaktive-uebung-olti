@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codes überall!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563EB;
+      --primary-dark: #1D4ED8;
+      --yellow: #F59E0B;
+      --yellow-dark: #D97706;
+      --pink: #EC4899;
+      --pink-dark: #DB2777;
+      --green: #10B981;
+      --green-dark: #059669;
+      --bg: #EFF6FF;
+      --white: #ffffff;
+      --dark: #0F172A;
+      --muted: #64748B;
+      --border: #CBD5E1;
+      --shadow-soft: rgba(0,0,0,0.08);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Comic Neue', cursive;
+      background: var(--bg);
+      min-height: 100dvh;
+      color: var(--dark);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      border-bottom: 3px solid var(--border);
+      padding: 10px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      box-shadow: 0 4px 16px var(--shadow-soft);
+    }
+    .nav-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+    .tab-btn {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 7px 14px;
+      border-radius: 10px;
+      border: 2.5px solid var(--dark);
+      box-shadow: 0 3px 0 var(--dark);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+      background: var(--white);
+      color: var(--dark);
+      white-space: nowrap;
+    }
+    .tab-btn:hover  { transform: translateY(-1px); box-shadow: 0 4px 0 var(--dark); }
+    .tab-btn:active { transform: translateY(3px);  box-shadow: 0 0   0 var(--dark); }
+    .tab-btn.active[data-tab="alltag"] { background: var(--green);   color: #fff; border-color: var(--green-dark);  box-shadow: 0 3px 0 var(--green-dark); }
+    .tab-btn.active[data-tab="romer"]  { background: var(--yellow);  color: #fff; border-color: var(--yellow-dark); box-shadow: 0 3px 0 var(--yellow-dark); }
+    .tab-btn.active[data-tab="binary"] { background: var(--primary); color: #fff; border-color: var(--primary-dark);box-shadow: 0 3px 0 var(--primary-dark); }
+    .tab-btn.active[data-tab="ascii"]  { background: var(--pink);    color: #fff; border-color: var(--pink-dark);   box-shadow: 0 3px 0 var(--pink-dark); }
+    .score-badge {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      background: var(--yellow);
+      color: white;
+      padding: 5px 13px;
+      border-radius: 20px;
+      border: 2px solid var(--yellow-dark);
+      box-shadow: 0 2px 0 var(--yellow-dark);
+      flex-shrink: 0;
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 20px 14px 130px;
+    }
+    .module { display: none; animation: fadeUp 0.25s ease; }
+    .module.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── MODULE HEADER ── */
+    .mod-header { text-align: center; padding: 28px 0 20px; }
+    .mod-header h1 { font-family: 'Baloo 2', sans-serif; font-size: 2.1rem; font-weight: 800; line-height: 1.2; }
+    .mod-header p  { font-size: 1rem; color: var(--muted); margin-top: 6px; }
+
+    /* ── CLAY CARD ── */
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      border: 3px solid var(--border);
+      box-shadow: 0 5px 0 #c8d3e8, 0 10px 28px var(--shadow-soft);
+      padding: 22px;
+      margin-bottom: 22px;
+    }
+    .card h2 {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .card-hint { font-size: 0.88rem; color: var(--muted); margin-bottom: 14px; }
+
+    /* ── MEMO CARD ── */
+    .memo {
+      border-radius: 16px;
+      padding: 18px 22px;
+      margin-bottom: 22px;
+      border: 3px solid;
+    }
+    .memo.green  { background: #ECFDF5; border-color: #6EE7B7; }
+    .memo.yellow { background: #FFFBEB; border-color: #FCD34D; }
+    .memo.blue   { background: #EFF6FF; border-color: #93C5FD; }
+    .memo.pink   { background: #FDF2F8; border-color: #F9A8D4; }
+    .memo .tag {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 7px;
+    }
+    .memo.green  .tag { color: var(--green-dark); }
+    .memo.yellow .tag { color: var(--yellow-dark); }
+    .memo.blue   .tag { color: var(--primary); }
+    .memo.pink   .tag { color: var(--pink-dark); }
+    .memo p { font-size: 1.02rem; line-height: 1.7; }
+    .memo strong { font-weight: 700; }
+
+    /* ── CLAY BUTTON ── */
+    .btn {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 9px 18px;
+      border-radius: 11px;
+      border: 2.5px solid var(--dark);
+      box-shadow: 0 4px 0 var(--dark);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+      background: var(--white);
+      color: var(--dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn:hover  { transform: translateY(-1px); box-shadow: 0 5px 0 var(--dark); }
+    .btn:active { transform: translateY(4px);  box-shadow: 0 0   0 var(--dark); }
+    .btn.primary { background: var(--primary); color: #fff; border-color: var(--primary-dark); box-shadow: 0 4px 0 var(--primary-dark); }
+    .btn.primary:hover  { box-shadow: 0 5px 0 var(--primary-dark); }
+    .btn.primary:active { box-shadow: 0 0   0 var(--primary-dark); }
+    .btn.green  { background: var(--green);  color: #fff; border-color: var(--green-dark);  box-shadow: 0 4px 0 var(--green-dark); }
+    .btn.green:hover  { box-shadow: 0 5px 0 var(--green-dark); }
+    .btn.green:active { box-shadow: 0 0   0 var(--green-dark); }
+    .btn.yellow { background: var(--yellow); color: #fff; border-color: var(--yellow-dark); box-shadow: 0 4px 0 var(--yellow-dark); }
+    .btn.yellow:hover  { box-shadow: 0 5px 0 var(--yellow-dark); }
+    .btn.yellow:active { box-shadow: 0 0   0 var(--yellow-dark); }
+    .btn.pink   { background: var(--pink);   color: #fff; border-color: var(--pink-dark);   box-shadow: 0 4px 0 var(--pink-dark); }
+    .btn.pink:hover  { box-shadow: 0 5px 0 var(--pink-dark); }
+    .btn.pink:active { box-shadow: 0 0   0 var(--pink-dark); }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+
+    /* ── INPUT ── */
+    .inp {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1rem;
+      padding: 9px 14px;
+      border-radius: 11px;
+      border: 2.5px solid var(--border);
+      background: var(--white);
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+    .inp:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+    .inp-label { font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 6px; }
+
+    /* ── RESULT BOX ── */
+    .result-box {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: center;
+      padding: 14px;
+      background: #EFF6FF;
+      border-radius: 12px;
+      border: 2.5px solid #93C5FD;
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    /* ── GRID ── */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    @media (max-width: 600px) {
+      .g2 { grid-template-columns: 1fr; }
+      .g3 { grid-template-columns: 1fr 1fr; }
+      .mod-header h1 { font-size: 1.55rem; }
+    }
+
+    /* ────────────────────────────
+       MODULE 1 — ALLTAGSCODES
+    ──────────────────────────── */
+    .sign-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 480px) { .sign-grid { grid-template-columns: repeat(2,1fr); } }
+    .sign-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 2.5px solid var(--border);
+      box-shadow: 0 4px 0 #c8d3e8;
+      padding: 16px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+    .sign-card:hover  { transform: translateY(-2px); box-shadow: 0 6px 0 #c8d3e8; }
+    .sign-card:active { transform: translateY(2px);  box-shadow: 0 2px 0 #c8d3e8; }
+    .sign-visual { width: 68px; height: 68px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
+    .sign-answer {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sign-answer.open {
+      color: var(--green-dark);
+      background: #ECFDF5;
+      border-radius: 8px;
+      padding: 4px 8px;
+    }
+
+    /* ────────────────────────────
+       MODULE 2 — RÖMISCHE ZAHLEN
+    ──────────────────────────── */
+    .roman-row {
+      display: grid;
+      grid-template-columns: repeat(7,1fr);
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 580px) { .roman-row { grid-template-columns: repeat(4,1fr); } }
+    .roman-cell {
+      background: var(--white);
+      border: 2.5px solid var(--yellow);
+      border-radius: 10px;
+      box-shadow: 0 3px 0 var(--yellow-dark);
+      padding: 9px 4px;
+      text-align: center;
+    }
+    .roman-cell .r { font-family: 'Baloo 2', sans-serif; font-size: 1.35rem; font-weight: 800; color: var(--yellow-dark); }
+    .roman-cell .d { font-size: 0.8rem; font-weight: 700; color: var(--muted); }
+
+    /* ────────────────────────────
+       MODULE 3 — BINÄRSYSTEM
+    ──────────────────────────── */
+    .bit-weights {
+      display: grid;
+      grid-template-columns: repeat(8,1fr);
+      gap: 5px;
+      margin-bottom: 4px;
+    }
+    .bit-w {
+      text-align: center;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--primary);
+      padding: 4px 0;
+    }
+    .bit-btns {
+      display: grid;
+      grid-template-columns: repeat(8,1fr);
+      gap: 5px;
+    }
+    .bit-btn {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      font-size: 1.35rem;
+      padding: 12px 0;
+      border-radius: 11px;
+      border: 2.5px solid var(--border);
+      box-shadow: 0 4px 0 #c8d3e8;
+      cursor: pointer;
+      text-align: center;
+      background: var(--white);
+      color: var(--muted);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .bit-btn:hover  { transform: translateY(-2px); }
+    .bit-btn:active { transform: translateY(3px); box-shadow: 0 0 0 #c8d3e8; }
+    .bit-btn.on { background: var(--primary); color: #fff; border-color: var(--primary-dark); box-shadow: 0 4px 0 var(--primary-dark); }
+    .bit-result {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 18px;
+      background: #EFF6FF;
+      border-radius: 16px;
+      border: 2.5px solid #93C5FD;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .bit-dec { font-family: 'Baloo 2', sans-serif; font-size: 2.8rem; font-weight: 800; color: var(--primary); line-height: 1; }
+    .bit-bin { font-family: 'Baloo 2', monospace; font-size: 1.05rem; font-weight: 700; color: var(--muted); letter-spacing: 2px; }
+    .bit-eq  { font-size: 1.8rem; color: var(--muted); }
+    .bit-sub { font-size: 0.78rem; color: var(--muted); text-align: center; }
+    .challenge-box {
+      background: linear-gradient(135deg, #EFF6FF, #F0FDF4);
+      border: 2.5px dashed #93C5FD;
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .challenge-box .ch-lbl { font-size: 0.88rem; color: var(--muted); margin-bottom: 4px; }
+    .challenge-box .ch-num { font-family: 'Baloo 2', sans-serif; font-size: 3.2rem; font-weight: 800; color: var(--primary); }
+
+    /* Binary Clock */
+    #bin-clock {
+      font-family: 'Baloo 2', monospace;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 3px;
+      text-align: center;
+      padding: 14px;
+      background: #EFF6FF;
+      border-radius: 12px;
+    }
+    #clock-dec { font-size: 0.88rem; color: var(--muted); text-align: center; margin-top: 6px; }
+
+    /* ────────────────────────────
+       MODULE 4 — ASCII
+    ──────────────────────────── */
+    .ascii-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .ascii-cell {
+      background: var(--white);
+      border: 2px solid #F9A8D4;
+      border-radius: 9px;
+      padding: 7px 4px;
+      text-align: center;
+    }
+    .ascii-cell .al { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--pink-dark); }
+    .ascii-cell .ac { font-family: monospace; font-size: 0.72rem; color: var(--muted); }
+    .decode-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0;
+    }
+    .decode-chunk {
+      background: var(--white);
+      border: 2px solid #F9A8D4;
+      border-radius: 10px;
+      padding: 8px 10px;
+      text-align: center;
+      min-width: 80px;
+    }
+    .decode-chunk .dc-bin  { font-family: monospace; font-size: 0.75rem; color: var(--muted); }
+    .decode-chunk .dc-lett {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--pink-dark);
+      min-height: 2.2rem;
+      display: none;
+    }
+
+    /* ────────────────────────────
+       QUIZ
+    ──────────────────────────── */
+    .q-block { margin-bottom: 18px; }
+    .q-block p {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+    .q-opts { display: flex; flex-direction: column; gap: 7px; }
+    .q-opt {
+      font-family: 'Comic Neue', cursive;
+      font-weight: 700;
+      font-size: 0.97rem;
+      padding: 10px 15px;
+      border-radius: 11px;
+      border: 2.5px solid var(--border);
+      background: var(--white);
+      cursor: pointer;
+      text-align: left;
+      box-shadow: 0 3px 0 #c8d3e8;
+      transition: transform 0.1s, border-color 0.15s;
+    }
+    .q-opt:hover  { transform: translateY(-1px); border-color: var(--primary); }
+    .q-opt:active { transform: translateY(2px); }
+    .q-opt.correct { background: #ECFDF5; border-color: var(--green);  box-shadow: 0 3px 0 var(--green-dark); color: #065F46; }
+    .q-opt.wrong   { background: #FEF2F2; border-color: #EF4444;        box-shadow: 0 3px 0 #DC2626;          color: #7F1D1D; }
+    .q-fb { margin-top: 8px; padding: 9px 13px; border-radius: 9px; font-weight: 700; font-size: 0.9rem; display: none; }
+    .q-fb.show { display: block; }
+    .q-fb.correct { background: #ECFDF5; color: #065F46; border: 2px solid #6EE7B7; }
+    .q-fb.wrong   { background: #FEF2F2; color: #7F1D1D; border: 2px solid #FCA5A5; }
+
+    /* ────────────────────────────
+       AI CHAT
+    ──────────────────────────── */
+    #chat-fab {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      z-index: 1000;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 11px 18px;
+      background: var(--primary);
+      color: #fff;
+      border: 2.5px solid var(--primary-dark);
+      border-radius: 50px;
+      box-shadow: 0 4px 0 var(--primary-dark), 0 8px 24px rgba(37,99,235,0.3);
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    #chat-fab:hover  { transform: translateY(-2px); box-shadow: 0 6px 0 var(--primary-dark), 0 10px 24px rgba(37,99,235,0.3); }
+    #chat-fab:active { transform: translateY(4px);  box-shadow: 0 0   0 var(--primary-dark); }
+    #chat-panel {
+      position: fixed;
+      bottom: 76px;
+      right: 22px;
+      width: 330px;
+      max-height: 490px;
+      background: var(--white);
+      border: 3px solid var(--primary);
+      border-radius: 20px;
+      box-shadow: 0 8px 0 var(--primary-dark), 0 20px 40px rgba(37,99,235,0.2);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: scale(0.9) translateY(12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    #chat-panel.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: auto; }
+    @media (max-width: 380px) { #chat-panel { width: calc(100vw - 28px); right: 14px; } }
+    .chat-head {
+      background: var(--primary);
+      color: #fff;
+      padding: 12px 16px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 0.97rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chat-head button {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px 4px;
+    }
+    #api-area {
+      padding: 11px 13px;
+      background: #F8FAFC;
+      border-bottom: 2px solid var(--border);
+    }
+    #api-area p { font-size: 0.78rem; color: var(--muted); margin-bottom: 6px; }
+    #api-area.hidden { display: none; }
+    .api-row { display: flex; gap: 6px; }
+    #api-inp {
+      flex: 1;
+      font-size: 0.83rem;
+      padding: 7px 10px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+      font-family: monospace;
+    }
+    #api-inp:focus { border-color: var(--primary); }
+    #api-save {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 0.83rem;
+      padding: 7px 11px;
+      background: var(--green);
+      color: #fff;
+      border: 2px solid var(--green-dark);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #chat-msgs {
+      flex: 1;
+      overflow-y: auto;
+      padding: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      min-height: 180px;
+    }
+    .msg {
+      padding: 9px 13px;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      max-width: 87%;
+    }
+    .msg.user { background: var(--primary); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
+    .msg.ai { background: #F1F5F9; color: var(--dark); align-self: flex-start; border-bottom-left-radius: 3px; }
+    .msg.ai.loading { color: var(--muted); font-style: italic; }
+    .chat-inp-row {
+      padding: 9px 11px;
+      border-top: 2px solid var(--border);
+      display: flex;
+      gap: 7px;
+    }
+    #chat-inp {
+      flex: 1;
+      font-family: 'Comic Neue', cursive;
+      font-size: 0.88rem;
+      padding: 7px 12px;
+      border: 2px solid var(--border);
+      border-radius: 9px;
+      outline: none;
+    }
+    #chat-inp:focus { border-color: var(--primary); }
+    #chat-send {
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 7px 13px;
+      background: var(--primary);
+      color: #fff;
+      border: 2px solid var(--primary-dark);
+      border-radius: 9px;
+      cursor: pointer;
+      box-shadow: 0 2px 0 var(--primary-dark);
+    }
+    #chat-send:active { transform: translateY(2px); box-shadow: none; }
+
+    /* ── UTILITY ── */
+    .mt2 { margin-top: 8px; }
+    .mt3 { margin-top: 12px; }
+    .mt4 { margin-top: 16px; }
+    .mb3 { margin-bottom: 12px; }
+    .tc  { text-align: center; }
+    .sm  { font-size: 0.85rem; }
+    .muted { color: var(--muted); }
+    .hidden { display: none !important; }
+    hr { border: none; border-top: 2px solid var(--border); margin: 18px 0; }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Codes überall!</div>
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="alltag"  role="tab" aria-selected="true">🚦 Alltagscodes</button>
+      <button class="tab-btn"        data-tab="romer"   role="tab" aria-selected="false">🏛 Römer</button>
+      <button class="tab-btn"        data-tab="binary"  role="tab" aria-selected="false">💡 Binär</button>
+      <button class="tab-btn"        data-tab="ascii"   role="tab" aria-selected="false">🔤 ASCII</button>
+    </div>
+    <div class="score-badge" aria-live="polite">⭐ <span id="pts">0</span> Pkt</div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ════════════════════════════════
+     MODULE 1 — ALLTAGSCODES
+════════════════════════════════ -->
+<section class="module active" id="module-alltag">
+  <div class="mod-header">
+    <h1 style="color:var(--green-dark)">Ein Code für alle Fälle</h1>
+    <p>Codes begegnen uns überall</p>
+  </div>
+
+  <div class="memo green">
+    <div class="tag">✅ Merke</div>
+    <p>Ein <strong>Code</strong> ist ein System aus Zeichen. Jedes Zeichen hat eine Bedeutung.<br>
+    Buchstaben, Zahlen und Symbole können alle Codes sein.</p>
+  </div>
+
+  <div class="card">
+    <h2>Was bedeutet dieses Zeichen?</h2>
+    <p class="card-hint">Klicke auf ein Schild → Bedeutung wird angezeigt</p>
+    <div class="sign-grid">
+
+      <div class="sign-card" onclick="showSign(this)" data-ans="⚠ Achtung, Gefahr!">
+        <div class="sign-visual">
+          <svg width="66" height="60" viewBox="0 0 66 60" aria-hidden="true">
+            <polygon points="33,3 63,57 3,57" fill="#FEF08A" stroke="#EF4444" stroke-width="5" stroke-linejoin="round"/>
+            <text x="33" y="47" font-size="26" font-weight="900" fill="#EF4444" text-anchor="middle" font-family="Arial">!</text>
+          </svg>
+        </div>
+        <div class="sign-answer">Tippen zum Sehen</div>
+      </div>
+
+      <div class="sign-card" onclick="showSign(this)" data-ans="Achtung, Bahnübergang">
+        <div class="sign-visual">
+          <svg width="66" height="60" viewBox="0 0 66 60" aria-hidden="true">
+            <polygon points="33,3 63,57 3,57" fill="#FEF08A" stroke="#EF4444" stroke-width="5" stroke-linejoin="round"/>
+            <text x="33" y="50" font-size="22" text-anchor="middle">🚂</text>
+          </svg>
+        </div>
+        <div class="sign-answer">Tippen zum Sehen</div>
+      </div>
+
+      <div class="sign-card" onclick="showSign(this)" data-ans="Max. Höhe: 3.5m">
+        <div class="sign-visual">
+          <svg width="66" height="66" viewBox="0 0 66 66" aria-hidden="true">
+            <circle cx="33" cy="33" r="29" fill="white" stroke="#EF4444" stroke-width="7"/>
+            <text x="33" y="39" font-size="15" font-weight="800" fill="#0F172A" text-anchor="middle" font-family="Arial">3.5m</text>
+          </svg>
+        </div>
+        <div class="sign-answer">Tippen zum Sehen</div>
+      </div>
+
+      <div class="sign-card" onclick="showSign(this)" data-ans="Keine Lastwagen">
+        <div class="sign-visual">
+          <svg width="66" height="66" viewBox="0 0 66 66" aria-hidden="true">
+            <circle cx="33" cy="33" r="29" fill="white" stroke="#EF4444" stroke-width="7"/>
+            <text x="33" y="40" font-size="22" text-anchor="middle">🚚</text>
+            <line x1="12" y1="12" x2="54" y2="54" stroke="#EF4444" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="sign-answer">Tippen zum Sehen</div>
+      </div>
+
+      <div class="sign-card" onclick="showSign(this)" data-ans="Postfiliale">
+        <div class="sign-visual">
+          <svg width="66" height="60" viewBox="0 0 66 60" aria-hidden="true">
+            <rect x="3" y="6" width="60" height="50" rx="7" fill="#F59E0B"/>
+            <text x="33" y="40" font-size="26" text-anchor="middle">📯</text>
+          </svg>
+        </div>
+        <div class="sign-answer">Tippen zum Sehen</div>
+      </div>
+
+      <div class="sign-card" onclick="showSign(this)" data-ans="Campingplatz">
+        <div class="sign-visual">
+          <svg width="66" height="60" viewBox="0 0 66 60" aria-hidden="true">
+            <rect x="3" y="6" width="60" height="50" rx="7" fill="#2563EB"/>
+            <text x="33" y="40" font-size="26" text-anchor="middle">⛺</text>
+          </svg>
+        </div>
+        <div class="sign-answer">Tippen zum Sehen</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card">
+    <h2>⚡ Quiz</h2>
+    <div id="q-alltag"></div>
+    <div class="btn-row">
+      <button class="btn green" onclick="initQuiz('q-alltag', qAlltag, 'qa')">🔄 Neue Fragen</button>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     MODULE 2 — RÖMISCHE ZAHLEN
+════════════════════════════════ -->
+<section class="module" id="module-romer">
+  <div class="mod-header">
+    <h1 style="color:var(--yellow-dark)">Rechnen wie die Römer</h1>
+    <p>Buchstaben als Zahlen – über 2000 Jahre alt</p>
+  </div>
+
+  <div class="memo yellow">
+    <div class="tag">✅ Merke</div>
+    <p>
+      <strong>Kleiner Wert links</strong> vom grossen → subtrahieren: IV = 5−1 = <strong>4</strong><br>
+      <strong>Kleiner Wert rechts</strong> vom grossen → addieren: VI = 5+1 = <strong>6</strong>
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Tabelle</h2>
+    <div class="roman-row">
+      <div class="roman-cell"><div class="r">I</div><div class="d">1</div></div>
+      <div class="roman-cell"><div class="r">V</div><div class="d">5</div></div>
+      <div class="roman-cell"><div class="r">X</div><div class="d">10</div></div>
+      <div class="roman-cell"><div class="r">L</div><div class="d">50</div></div>
+      <div class="roman-cell"><div class="r">C</div><div class="d">100</div></div>
+      <div class="roman-cell"><div class="r">D</div><div class="d">500</div></div>
+      <div class="roman-cell"><div class="r">M</div><div class="d">1000</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Umrechner</h2>
+    <div class="g2">
+      <div>
+        <label class="inp-label" style="color:var(--yellow-dark)" for="dec-in">Dezimal → Römisch</label>
+        <input class="inp" type="number" id="dec-in" min="1" max="3999" placeholder="z.B. 2024" oninput="cvtToRoman()">
+        <div class="result-box" id="rom-res" style="color:var(--yellow-dark);border-color:#FCD34D;background:#FFFBEB">—</div>
+      </div>
+      <div>
+        <label class="inp-label" style="color:var(--yellow-dark)" for="rom-in">Römisch → Dezimal</label>
+        <input class="inp" type="text" id="rom-in" placeholder="z.B. MMXXIV" style="text-transform:uppercase" oninput="cvtFromRoman()">
+        <div class="result-box" id="dec-res" style="color:var(--yellow-dark);border-color:#FCD34D;background:#FFFBEB">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Quiz</h2>
+    <div id="q-romer"></div>
+    <div class="btn-row">
+      <button class="btn yellow" onclick="initQuiz('q-romer', qRomer, 'qr')">🔄 Neue Fragen</button>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     MODULE 3 — BINÄRSYSTEM
+════════════════════════════════ -->
+<section class="module" id="module-binary">
+  <div class="mod-header">
+    <h1 style="color:var(--primary)">Nullen und Einsen</h1>
+    <p>Computer verstehen nur 0 und 1</p>
+  </div>
+
+  <div class="memo blue">
+    <div class="tag">✅ Merke</div>
+    <p>Das Binärsystem hat nur <strong>zwei Ziffern: 0 und 1</strong>.<br>
+    Jede Stelle ist doppelt so gross: <strong>1 · 2 · 4 · 8 · 16 · 32 · 64 · 128 …</strong><br>
+    Beispiel: 20 = 16 + 4 → <strong>00010100</strong></p>
+  </div>
+
+  <div class="card">
+    <h2>Bit-Schalter</h2>
+    <p class="card-hint">Klicke auf die Bits, um sie ein- oder auszuschalten</p>
+    <div class="bit-weights">
+      <div class="bit-w">128</div><div class="bit-w">64</div><div class="bit-w">32</div><div class="bit-w">16</div>
+      <div class="bit-w">8</div><div class="bit-w">4</div><div class="bit-w">2</div><div class="bit-w">1</div>
+    </div>
+    <div class="bit-btns" id="bit-btns"></div>
+    <div class="bit-result">
+      <div class="tc">
+        <div class="bit-bin" id="bin-str">00000000</div>
+        <div class="bit-sub mt2">Binär</div>
+      </div>
+      <div class="bit-eq">=</div>
+      <div class="tc">
+        <div class="bit-dec" id="bin-dec" aria-live="polite">0</div>
+        <div class="bit-sub mt2">Dezimal</div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="clearBits()">✕ Löschen</button>
+      <button class="btn primary" onclick="rndBits()">🎲 Zufallszahl</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎯 Aufgabe</h2>
+    <p class="card-hint mb3">Stelle diese Dezimalzahl als Binärzahl dar:</p>
+    <div class="challenge-box">
+      <div class="ch-lbl">Dezimalzahl</div>
+      <div class="ch-num" id="ch-num" aria-live="polite">20</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="checkChallenge()">✓ Prüfen</button>
+      <button class="btn" onclick="newChallenge()">🎲 Neue Aufgabe</button>
+    </div>
+    <div class="q-fb" id="ch-fb"></div>
+  </div>
+
+  <div class="card">
+    <h2>⏰ Binär-Uhr</h2>
+    <p class="card-hint">Wie die Uhr am Bahnhof St. Gallen — die aktuelle Zeit in Binär!</p>
+    <div id="bin-clock"></div>
+    <div id="clock-dec"></div>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Quiz</h2>
+    <div id="q-binary"></div>
+    <div class="btn-row">
+      <button class="btn primary" onclick="initQuiz('q-binary', qBinary, 'qb')">🔄 Neue Fragen</button>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════
+     MODULE 4 — ASCII
+════════════════════════════════ -->
+<section class="module" id="module-ascii">
+  <div class="mod-header">
+    <h1 style="color:var(--pink-dark)">ASCII-Code</h1>
+    <p>Jeder Buchstabe = 8 Bits (= 1 Byte)</p>
+  </div>
+
+  <div class="memo pink">
+    <div class="tag">✅ Merke</div>
+    <p>ASCII-Code speichert Buchstaben als Binärzahlen.<br>
+    <strong>A = 01000001 · B = 01000010 · C = 01000011 …</strong><br>
+    Jeder Buchstabe braucht genau <strong>8 Bits</strong>.</p>
+  </div>
+
+  <div class="card">
+    <h2>Tabelle A–Z</h2>
+    <div class="ascii-grid" id="ascii-tbl"></div>
+  </div>
+
+  <div class="card">
+    <h2>Umrechner</h2>
+    <div class="g2">
+      <div>
+        <label class="inp-label" style="color:var(--pink-dark)" for="l-in">Buchstabe → Binär</label>
+        <input class="inp mt2" type="text" id="l-in" maxlength="1" placeholder="A" style="text-transform:uppercase;font-size:1.6rem;text-align:center" oninput="l2b()">
+        <div class="result-box mt2" id="l-res" style="color:var(--pink-dark);border-color:#F9A8D4;background:#FDF2F8;font-size:1.05rem;letter-spacing:3px">—</div>
+      </div>
+      <div>
+        <label class="inp-label" style="color:var(--pink-dark)" for="b-in">Binär → Buchstabe</label>
+        <input class="inp mt2" type="text" id="b-in" maxlength="8" placeholder="01000001" oninput="b2l()">
+        <div class="result-box mt2" id="b-res" style="color:var(--pink-dark);border-color:#F9A8D4;background:#FDF2F8;font-size:3rem;font-weight:800">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔐 Geheimwort entschlüsseln</h2>
+    <p class="card-hint">Benutze die Tabelle – welches Wort steckt hier?</p>
+    <div class="decode-row" id="decode-row"></div>
+    <div class="btn-row">
+      <button class="btn pink"  onclick="revealWord()">👁 Aufdecken</button>
+      <button class="btn"       onclick="hideWord()">🙈 Verstecken</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Quiz</h2>
+    <div id="q-ascii"></div>
+    <div class="btn-row">
+      <button class="btn pink" onclick="initQuiz('q-ascii', qAscii, 'qas')">🔄 Neue Fragen</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ── AI CHAT ── -->
+<button id="chat-fab" onclick="toggleChat()" aria-label="KI-Lernhelfer öffnen">🤖 Frag die KI</button>
+
+<div id="chat-panel" role="dialog" aria-label="KI-Lernhelfer" aria-modal="true">
+  <div class="chat-head">
+    <span>🤖 KI-Lernhelfer</span>
+    <button onclick="toggleChat()" aria-label="Schliessen">✕</button>
+  </div>
+  <div id="api-area">
+    <p>Einmalig deinen OpenAI API-Schlüssel eingeben:</p>
+    <div class="api-row">
+      <input type="password" id="api-inp" placeholder="sk-..." autocomplete="off" aria-label="API-Schlüssel">
+      <button id="api-save" onclick="saveKey()">OK</button>
+    </div>
+  </div>
+  <div id="chat-msgs" aria-live="polite">
+    <div class="msg ai">Hallo! 👋 Ich helfe dir beim Lernen über Codes. Stell mir eine Frage!</div>
+  </div>
+  <div class="chat-inp-row">
+    <input type="text" id="chat-inp" placeholder="Deine Frage..." onkeydown="if(event.key==='Enter')sendMsg()" aria-label="Nachricht eingeben">
+    <button id="chat-send" onclick="sendMsg()" aria-label="Senden">→</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════
+   STATE
+══════════════════════════════════ */
+let pts = 0;
+let apiKey = '';
+let bits = [0,0,0,0,0,0,0,0];
+const W = [128,64,32,16,8,4,2,1];
+let chTarget = 20;
+
+const ASCII = {
+  A:'01000001',B:'01000010',C:'01000011',D:'01000100',E:'01000101',
+  F:'01000110',G:'01000111',H:'01001000',I:'01001001',J:'01001010',
+  K:'01001011',L:'01001100',M:'01001101',N:'01001110',O:'01001111',
+  P:'01010000',Q:'01010001',R:'01010010',S:'01010011',T:'01010100',
+  U:'01010101',V:'01010110',W:'01010111',X:'01011000',Y:'01011001',Z:'01011010'
+};
+
+/* ══════════════════════════════════
+   NAV TABS
+══════════════════════════════════ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+    document.querySelectorAll('.module').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected','true');
+    document.getElementById('module-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ══════════════════════════════════
+   SCORE
+══════════════════════════════════ */
+function addPts(n) {
+  pts += n;
+  document.getElementById('pts').textContent = pts;
+}
+
+/* ══════════════════════════════════
+   MODULE 1 — SIGNS
+══════════════════════════════════ */
+function showSign(card) {
+  const el = card.querySelector('.sign-answer');
+  if (!el.classList.contains('open')) {
+    el.textContent = card.dataset.ans;
+    el.classList.add('open');
+    addPts(1);
+  }
+}
+
+/* ══════════════════════════════════
+   MODULE 2 — ROMAN NUMERALS
+══════════════════════════════════ */
+function toRoman(n) {
+  if (!n || n < 1 || n > 3999) return '—';
+  const vals = [1000,900,500,400,100,90,50,40,10,9,5,4,1];
+  const syms = ['M','CM','D','CD','C','XC','L','XL','X','IX','V','IV','I'];
+  let r = '';
+  for (let i = 0; i < vals.length; i++) while (n >= vals[i]) { r += syms[i]; n -= vals[i]; }
+  return r;
+}
+
+function fromRoman(s) {
+  if (!s) return '—';
+  s = s.toUpperCase().replace(/[^IVXLCDM]/g,'');
+  if (!s) return '—';
+  const m = {I:1,V:5,X:10,L:50,C:100,D:500,M:1000};
+  let r = 0;
+  for (let i = 0; i < s.length; i++) {
+    const c = m[s[i]], nx = m[s[i+1]];
+    if (!c) return '?';
+    r += (nx && c < nx) ? -c : c;
+  }
+  return r > 0 ? r : '—';
+}
+
+function cvtToRoman() {
+  const n = parseInt(document.getElementById('dec-in').value);
+  document.getElementById('rom-res').textContent = toRoman(n);
+}
+function cvtFromRoman() {
+  const v = document.getElementById('rom-in').value;
+  document.getElementById('dec-res').textContent = fromRoman(v);
+}
+
+/* ══════════════════════════════════
+   MODULE 3 — BINARY
+══════════════════════════════════ */
+function renderBits() {
+  const c = document.getElementById('bit-btns');
+  c.innerHTML = '';
+  bits.forEach((b, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = b;
+    btn.className = 'bit-btn' + (b ? ' on' : '');
+    btn.setAttribute('aria-label', `Bit ${W[i]}, Wert ${b}`);
+    btn.setAttribute('aria-pressed', b ? 'true' : 'false');
+    btn.onclick = () => { bits[i] = bits[i] ? 0 : 1; renderBits(); };
+    c.appendChild(btn);
+  });
+  const dec = bits.reduce((s,b,i) => s + b*W[i], 0);
+  document.getElementById('bin-dec').textContent = dec;
+  document.getElementById('bin-str').textContent = bits.slice(0,4).join('') + ' ' + bits.slice(4).join('');
+}
+
+function clearBits() { bits.fill(0); renderBits(); }
+function rndBits() {
+  const r = Math.floor(Math.random() * 254) + 1;
+  r.toString(2).padStart(8,'0').split('').forEach((b,i) => bits[i] = +b);
+  renderBits();
+}
+function newChallenge() {
+  chTarget = Math.floor(Math.random() * 200) + 1;
+  document.getElementById('ch-num').textContent = chTarget;
+  const fb = document.getElementById('ch-fb');
+  fb.className = 'q-fb';
+  clearBits();
+}
+function checkChallenge() {
+  const dec = bits.reduce((s,b,i) => s + b*W[i], 0);
+  const fb = document.getElementById('ch-fb');
+  if (dec === chTarget) {
+    fb.textContent = `✅ Richtig! ${chTarget} = ${bits.join('')} · +3 Punkte`;
+    fb.className = 'q-fb correct show';
+    addPts(3);
+  } else {
+    const correct = chTarget.toString(2).padStart(8,'0');
+    fb.textContent = `❌ ${dec} ist falsch. ${chTarget} in Binär = ${correct}`;
+    fb.className = 'q-fb wrong show';
+  }
+}
+
+/* Binary Clock */
+function tickClock() {
+  const now = new Date();
+  const h = now.getHours().toString(2).padStart(6,'0');
+  const m = now.getMinutes().toString(2).padStart(6,'0');
+  const s = now.getSeconds().toString(2).padStart(6,'0');
+  document.getElementById('bin-clock').textContent = `${h}  :  ${m}  :  ${s}`;
+  const pad2 = n => String(n).padStart(2,'0');
+  document.getElementById('clock-dec').textContent =
+    `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())} Uhr`;
+}
+setInterval(tickClock, 1000);
+tickClock();
+
+/* ══════════════════════════════════
+   MODULE 4 — ASCII
+══════════════════════════════════ */
+function buildAsciiTable() {
+  const c = document.getElementById('ascii-tbl');
+  c.innerHTML = '';
+  Object.entries(ASCII).forEach(([l, code]) => {
+    const div = document.createElement('div');
+    div.className = 'ascii-cell';
+    div.innerHTML = `<div class="al">${l}</div><div class="ac">${code}</div>`;
+    c.appendChild(div);
+  });
+}
+
+function l2b() {
+  const l = document.getElementById('l-in').value.toUpperCase();
+  document.getElementById('l-res').textContent = ASCII[l] || '?';
+}
+function b2l() {
+  const bin = document.getElementById('b-in').value;
+  const entry = Object.entries(ASCII).find(([,v]) => v === bin);
+  document.getElementById('b-res').textContent = entry ? entry[0] : '?';
+}
+
+const SECRET = ['01001101','01000101','01011000','01001001','01001011','01001111']; // MEXIKO
+
+function buildDecodeRow() {
+  const c = document.getElementById('decode-row');
+  c.innerHTML = '';
+  SECRET.forEach(code => {
+    const entry = Object.entries(ASCII).find(([,v]) => v === code);
+    const letter = entry ? entry[0] : '?';
+    const d = document.createElement('div');
+    d.className = 'decode-chunk';
+    d.innerHTML = `<div class="dc-bin">${code}</div><div class="dc-lett">${letter}</div>`;
+    c.appendChild(d);
+  });
+}
+function revealWord() {
+  document.querySelectorAll('.dc-lett').forEach(el => el.style.display = 'block');
+  addPts(2);
+}
+function hideWord() {
+  document.querySelectorAll('.dc-lett').forEach(el => el.style.display = 'none');
+}
+
+/* ══════════════════════════════════
+   QUIZ ENGINE
+══════════════════════════════════ */
+function initQuiz(containerId, bank, prefix) {
+  const pool = [...bank].sort(() => Math.random() - 0.5).slice(0, 3);
+  const c = document.getElementById(containerId);
+  c.innerHTML = '';
+  pool.forEach((q, i) => {
+    const id = `${prefix}-fb-${i}`;
+    const div = document.createElement('div');
+    div.className = 'q-block';
+    div.innerHTML = `
+      <p>${i+1}. ${q.q}</p>
+      <div class="q-opts" data-correct="${q.ans}">
+        ${q.opts.map((o, j) => `<button class="q-opt" onclick="checkOpt(this,${j},'${id}')">${o}</button>`).join('')}
+      </div>
+      <div class="q-fb" id="${id}"></div>`;
+    c.appendChild(div);
+  });
+}
+
+function checkOpt(btn, idx, fbId) {
+  const opts = btn.closest('.q-opts');
+  if (opts.querySelector('.correct, .wrong')) return;
+  const correct = parseInt(opts.dataset.correct);
+  const fb = document.getElementById(fbId);
+  opts.querySelectorAll('.q-opt').forEach(b => b.disabled = true);
+  opts.querySelectorAll('.q-opt')[correct].classList.add('correct');
+  if (idx === correct) {
+    fb.textContent = '✅ Richtig! +2 Punkte';
+    fb.className = 'q-fb correct show';
+    addPts(2);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '❌ Nicht ganz. Die richtige Antwort ist grün.';
+    fb.className = 'q-fb wrong show';
+  }
+}
+
+/* ── QUIZ BANKS ── */
+const qAlltag = [
+  { q:'Was ist ein Code?', opts:['Ein geheimes Passwort','Ein System aus Zeichen mit Bedeutung','Eine Programmiersprache'], ans:1 },
+  { q:'Welches ist KEIN Code?', opts:['Verkehrszeichen','Binärzahlen','Ein leeres Blatt Papier'], ans:2 },
+  { q:'Was bedeutet ein rotes Dreieck mit "!"?', opts:['Stopp','Achtung, Gefahr!','Einbahnstrasse'], ans:1 },
+  { q:'Was können Codes sein?', opts:['Nur Zahlen','Nur Buchstaben','Buchstaben, Zahlen und Symbole'], ans:2 },
+  { q:'Wo findest du Codes im Alltag?', opts:['Nur auf dem Computer','Im Strassenverkehr, auf Handys, in Büchern','Nur in der Schule'], ans:1 },
+];
+const qRomer = [
+  { q:'Was ist XIV?', opts:['16','14','4'], ans:1 },
+  { q:'Was ist IX?', opts:['11','9','8'], ans:1 },
+  { q:'Wie schreibt man 50?', opts:['L','C','D'], ans:0 },
+  { q:'Was ist MMXXIV?', opts:['2014','2024','224'], ans:1 },
+  { q:'Wie schreibt man 4?', opts:['IIII','IV','VI'], ans:1 },
+  { q:'Was ist MCM?', opts:['1100','1900','2100'], ans:1 },
+  { q:'Wie schreibt man 9?', opts:['VIIII','XI','IX'], ans:2 },
+  { q:'Was ist XLII?', opts:['52','32','42'], ans:2 },
+];
+const qBinary = [
+  { q:'Was ist 1010 in Dezimal?', opts:['8','10','12'], ans:1 },
+  { q:'Wie schreibt man 5 als Binärzahl?', opts:['110','101','100'], ans:1 },
+  { q:'Was ist 11111111 in Dezimal?', opts:['256','128','255'], ans:2 },
+  { q:'Was ist der grösste Stellenwert mit 8 Bits?', opts:['64','128','256'], ans:1 },
+  { q:'Was ist 00001000 in Dezimal?', opts:['4','16','8'], ans:2 },
+  { q:'Wie viele verschiedene Zahlen kann man mit 8 Bits darstellen?', opts:['128','255','256'], ans:2 },
+];
+const qAscii = [
+  { q:'Wie viele Bits braucht ein Buchstabe im ASCII-Code?', opts:['4','8','16'], ans:1 },
+  { q:'Was bedeutet 01000001?', opts:['B','A','C'], ans:1 },
+  { q:'Was ist ASCII?', opts:['Eine Programmiersprache','Buchstaben als Binärcodes','Ein Betriebssystem'], ans:1 },
+  { q:'Was ist 1 Byte?', opts:['4 Bits','16 Bits','8 Bits'], ans:2 },
+  { q:'Welcher Buchstabe hat den Code 01001011?', opts:['J','K','L'], ans:1 },
+];
+
+/* ══════════════════════════════════
+   AI CHAT
+══════════════════════════════════ */
+function toggleChat() {
+  document.getElementById('chat-panel').classList.toggle('open');
+}
+
+function saveKey() {
+  apiKey = document.getElementById('api-inp').value.trim();
+  if (apiKey) document.getElementById('api-area').classList.add('hidden');
+}
+
+async function sendMsg() {
+  const inp = document.getElementById('chat-inp');
+  const msg = inp.value.trim();
+  if (!msg) return;
+
+  if (!apiKey) {
+    const panel = document.getElementById('chat-panel');
+    panel.classList.add('open');
+    document.getElementById('api-area').classList.remove('hidden');
+    document.getElementById('api-inp').focus();
+    return;
+  }
+
+  inp.value = '';
+  const box = document.getElementById('chat-msgs');
+
+  const uDiv = document.createElement('div');
+  uDiv.className = 'msg user';
+  uDiv.textContent = msg;
+  box.appendChild(uDiv);
+
+  const aDiv = document.createElement('div');
+  aDiv.className = 'msg ai loading';
+  aDiv.textContent = '…';
+  box.appendChild(aDiv);
+  box.scrollTop = box.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: 'system',
+            content: 'Du bist ein Lernhelfer für 6.-Klässler in der Schweiz. Antworte IMMER auf Deutsch. SEHR kurz: maximal 2–3 kurze Sätze. Nur einfache Wörter – keine Fachbegriffe. Erkläre so einfach wie einem 11-jährigen Kind. Das Thema: Codes, Römische Zahlen, Binärsystem, ASCII-Code.'
+          },
+          { role: 'user', content: msg }
+        ],
+        max_tokens: 120,
+        temperature: 0.6
+      })
+    });
+    if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || 'API-Fehler'); }
+    const data = await res.json();
+    aDiv.className = 'msg ai';
+    aDiv.textContent = data.choices[0].message.content;
+  } catch (err) {
+    aDiv.className = 'msg ai';
+    aDiv.textContent = `Fehler: ${err.message}`;
+  }
+  box.scrollTop = box.scrollHeight;
+}
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
+renderBits();
+buildAsciiTable();
+buildDecodeRow();
+initQuiz('q-alltag', qAlltag, 'qa');
+initQuiz('q-romer', qRomer, 'qr');
+initQuiz('q-binary', qBinary, 'qb');
+initQuiz('q-ascii', qAscii, 'qas');
+</script>
+</body>
+</html>
